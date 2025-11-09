@@ -1,20 +1,13 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { logout } from "@/lib/auth";
+import { Header } from "@/components/header/page";
+import styles from "./page.module.css";
 
 export default function HomePage() {
-  const router = useRouter();
-  
-  function handleLogout() {
-    logout();
-    router.push("/login");
-  }
-
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Bem-vindo à Home!</h1>
-      <p>Você está logado.</p>
-      <button onClick={handleLogout}>Sair</button>
+    <div className="page">
+      <Header />
+      <div className={styles.container}>
+        <h1>Vendo</h1>
+      </div>
     </div>
   );
 }

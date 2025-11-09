@@ -14,13 +14,13 @@ import {
 import {
   ReservationRepo,
   PetRepo,
-  TutorRepo,
+  UserRepo,
   HotelRepo,
 } from "utils/localstorage";
 import {
   ReservationStatus,
   Pet,
-  Tutor,
+  User,
   Hotel,
   Reservation,
 } from "utils/models";
@@ -42,24 +42,24 @@ export default function AdicionarReserva({
 
   // form state
   const [petId, setPetId] = useState<string>("");
-  const [tutorId, setTutorId] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
   const [hotelId, setHotelId] = useState<string | undefined>(initialHotelId);
   const [checkinDate, setCheckinDate] = useState<string>("");
   const [checkoutDate, setCheckoutDate] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
 
   // inline create states
-  const [creatingTutor, setCreatingTutor] = useState(false);
+  const [creatingUser, setCreatingUser] = useState(false);
   const [creatingPet, setCreatingPet] = useState(false);
 
-  const [newTutorName, setNewTutorName] = useState("");
-  const [newTutorEmail, setNewTutorEmail] = useState("");
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
   const [newPetName, setNewPetName] = useState("");
   const [newPetSpecies, setNewPetSpecies] = useState("");
 
   // lists
   const [pets, setPets] = useState<Pet[]>([]);
-  const [tutors, setTutors] = useState<Tutor[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
   // errors
@@ -68,7 +68,7 @@ export default function AdicionarReserva({
 
   useEffect(() => {
     setPets(PetRepo.list());
-    setTutors(TutorRepo.list());
+    setUsers(UserRepo.list());
     setHotels(HotelRepo.list());
   }, []);
 
@@ -79,7 +79,7 @@ export default function AdicionarReserva({
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!tutorId) e.tutorId = "Selecione um tutor ou crie um novo.";
+    if (!userId) e.userId = "Selecione um user ou crie um novo.";
     if (!petId) e.petId = "Selecione um pet ou cadastre um novo.";
     if (!hotelId) e.hotelId = "Selecione um hotel.";
     if (!checkinDate) e.checkinDate = "Informe a data de check-in.";
@@ -93,40 +93,40 @@ export default function AdicionarReserva({
 
   function resetForm() {
     setPetId("");
-    setTutorId("");
+    setUserId("");
     if (!initialHotelId) setHotelId(undefined);
     setCheckinDate("");
     setCheckoutDate("");
     setNotes("");
     setErrors({});
     setCreatingPet(false);
-    setCreatingTutor(false);
+    setCreatingUser(false);
     setNewPetName("");
     setNewPetSpecies("");
-    setNewTutorName("");
-    setNewTutorEmail("");
+    setNewUserName("");
+    setNewUserEmail("");
   }
 
-  function handleCreateTutor() {
+  function handleCreateUser() {
     const e: Record<string, string> = {};
-    if (!newTutorName) e.newTutorName = "Nome do tutor é obrigatório.";
-    if (!newTutorEmail) e.newTutorEmail = "Email do tutor é obrigatório.";
+    if (!newUserName) e.newUserName = "Nome do user é obrigatório.";
+    if (!newUserEmail) e.newUserEmail = "Email do user é obrigatório.";
     setErrors(e);
     if (Object.keys(e).length) return;
 
     try {
-      const created = TutorRepo.create({
-        name: newTutorName,
-        email: newTutorEmail,
+      const created = UserRepo.create({
+        name: newUserName,
+        email: newUserEmail,
         phone: null,
       });
-      setTutors((s) => [...s, created]);
-      setTutorId(created.id);
-      setCreatingTutor(false);
-      setNewTutorName("");
-      setNewTutorEmail("");
+      setUsers((s) => [...s, created]);
+      setUserId(created.id);
+      setCreatingUser(false);
+      setNewUserName("");
+      setNewUserEmail("");
     } catch (err) {
-      setErrors({ submitTutor: "Não foi possível criar o tutor." });
+      setErrors({ submitUser: "Não foi possível criar o user." });
       console.error(err);
     }
   }
@@ -135,8 +135,8 @@ export default function AdicionarReserva({
     const e: Record<string, string> = {};
     if (!newPetName) e.newPetName = "Nome do pet é obrigatório.";
     if (!newPetSpecies) e.newPetSpecies = "Espécie do pet é obrigatória.";
-    if (!tutorId)
-      e.noTutor = "É necessário selecionar um tutor antes de cadastrar o pet.";
+    if (!userId)
+      e.noUser = "É necessário selecionar um tutor antes de cadastrar o pet.";
     setErrors(e);
     if (Object.keys(e).length) return;
 
@@ -144,7 +144,7 @@ export default function AdicionarReserva({
       const created = PetRepo.create({
         name: newPetName,
         species: newPetSpecies,
-        tutorId,
+        userId,
         age: null,
         obs: null,
       });
@@ -166,7 +166,7 @@ export default function AdicionarReserva({
 
     const payload = {
       petId,
-      tutorId,
+      userId,
       hotelId,
       checkinDate,
       checkoutDate,
@@ -201,23 +201,23 @@ export default function AdicionarReserva({
         <DialogHeader>
           <DialogTitle>Adicionar nova reserva</DialogTitle>
           <DialogDescription>
-            Aqui pode cadastrar reserva e, se necessário, criar tutor e pet sem
+            Aqui pode cadastrar reserva e, se necessário, criar usuário e pet sem
             sair do formulário.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Tutor*</label>
+            <label className="block text-sm font-medium">Usuário*</label>
             <div className="flex gap-2 items-center">
               <select
-                value={tutorId}
-                onChange={(ev) => setTutorId(ev.target.value)}
+                value={userId}
+                onChange={(ev) => setUserId(ev.target.value)}
                 className="mt-1 flex-1 block w-full rounded border px-2 py-2"
                 required
               >
                 <option value="">— selecione —</option>
-                {tutors.map((t) => (
+                {users.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.name}
                   </option>
@@ -226,50 +226,50 @@ export default function AdicionarReserva({
 
               <button
                 type="button"
-                onClick={() => setCreatingTutor((s) => !s)}
+                onClick={() => setCreatingUser((s) => !s)}
                 className={BTN_TOGGLE}
               >
-                {creatingTutor ? "Cancelar" : "Novo Tutor"}
+                {creatingUser ? "Cancelar" : "Novo User"}
               </button>
             </div>
 
-            {creatingTutor && (
+            {creatingUser && (
               <div className="mt-2 space-y-2 p-3 border rounded">
                 <input
                   placeholder="Nome"
-                  value={newTutorName}
-                  onChange={(ev) => setNewTutorName(ev.target.value)}
+                  value={newUserName}
+                  onChange={(ev) => setNewUserName(ev.target.value)}
                   className="block w-full rounded border px-2 py-2"
                 />
                 <input
                   placeholder="Email"
-                  value={newTutorEmail}
-                  onChange={(ev) => setNewTutorEmail(ev.target.value)}
+                  value={newUserEmail}
+                  onChange={(ev) => setNewUserEmail(ev.target.value)}
                   className="block w-full rounded border px-2 py-2"
                 />
-                {errors.newTutorName && (
-                  <p className="text-sm text-red-600">{errors.newTutorName}</p>
+                {errors.newUserName && (
+                  <p className="text-sm text-red-600">{errors.newUserName}</p>
                 )}
-                {errors.newTutorEmail && (
-                  <p className="text-sm text-red-600">{errors.newTutorEmail}</p>
+                {errors.newUserEmail && (
+                  <p className="text-sm text-red-600">{errors.newUserEmail}</p>
                 )}
-                {errors.submitTutor && (
-                  <p className="text-sm text-red-600">{errors.submitTutor}</p>
+                {errors.submitUser && (
+                  <p className="text-sm text-red-600">{errors.submitUser}</p>
                 )}
                 <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={handleCreateTutor}
+                    onClick={handleCreateUser}
                     className={BTN_STD}
                   >
-                    Criar Tutor
+                    Criar usuário
                   </button>
                 </div>
               </div>
             )}
 
-            {errors.tutorId && (
-              <p className="text-sm text-red-600">{errors.tutorId}</p>
+            {errors.userId && (
+              <p className="text-sm text-red-600">{errors.userId}</p>
             )}
           </div>
 
@@ -284,7 +284,7 @@ export default function AdicionarReserva({
               >
                 <option value="">— selecione —</option>
                 {pets
-                  .filter((p) => (tutorId ? p.tutorId === tutorId : true))
+                  .filter((p) => (userId ? p.userId === userId : true))
                   .map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name} • {p.species}
@@ -321,8 +321,8 @@ export default function AdicionarReserva({
                 {errors.newPetSpecies && (
                   <p className="text-sm text-red-600">{errors.newPetSpecies}</p>
                 )}
-                {errors.noTutor && (
-                  <p className="text-sm text-red-600">{errors.noTutor}</p>
+                {errors.noUser && (
+                  <p className="text-sm text-red-600">{errors.noUser}</p>
                 )}
                 {errors.submitPet && (
                   <p className="text-sm text-red-600">{errors.submitPet}</p>

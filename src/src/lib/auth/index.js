@@ -1,5 +1,12 @@
+import { UserRepo } from "@/utils/localstorage";
+
 export function login(email, password) {
-  if (email === "admin@gmail.com" && password === "123456") {
+  const data = UserRepo.list().filter(
+    (val) => val.email === email && val.password === password
+  )[0];
+
+  if (data) {
+    localStorage.setItem("auth", JSON.stringify(data));
     document.cookie = "auth=true; path=/";
     return true;
   }

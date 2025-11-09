@@ -13,7 +13,7 @@ import {
   ReservationRepo,
   PetRepo,
   HotelRepo,
-  TutorRepo,
+  UserRepo,
 } from "utils/localstorage";
 import { Hotel, Reservation, ReservationStatus } from "utils/models";
 import AdicionarReserva from "@/components/modais/AdicionarReservas";
@@ -32,7 +32,7 @@ const STATUS_META: Record<ReservationStatus, { label: string; badge: string }> =
 
 type ReservationView = Reservation & {
   petName?: string;
-  tutorName?: string;
+  userName?: string;
 };
 
 export default function Dashboard() {
@@ -51,11 +51,11 @@ export default function Dashboard() {
       );
       return allReservas.map((reserva) => {
         const pet = PetRepo.get(reserva.petId);
-        const tutor = TutorRepo.get(reserva.tutorId);
+        const user = UserRepo.get(reserva.userId);
         return {
           ...reserva,
           petName: pet?.name ?? "—",
-          tutorName: tutor?.name ?? "—",
+          userName: user?.name ?? "—",
         };
       });
     },
@@ -80,7 +80,7 @@ export default function Dashboard() {
     updateData();
   }, []);
 
-  // filtros simples (busca por pet/tutor e filtro por status)
+  // filtros simples (busca por pet/user e filtro por status)
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     return reservas
@@ -91,7 +91,7 @@ export default function Dashboard() {
         if (!q) return true;
         const fields = [
           r.petName,
-          r.tutorName,
+          r.userName,
           r.notes,
           r.checkinDate,
           r.checkoutDate,
@@ -168,7 +168,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 w-full md:w-1/2">
           <input
             aria-label="Buscar reservas"
-            placeholder="Buscar por pet, tutor, notas ou data..."
+            placeholder="Buscar por pet, usuário, notas ou data..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-300"
@@ -225,9 +225,9 @@ export default function Dashboard() {
                     <div>
                       <CardTitle className="text-lg">{r.petName}</CardTitle>
                       <CardDescription className="text-xs text-slate-500">
-                        Tutor:{" "}
+                        Usuário:{" "}
                         <span className="font-medium text-slate-700">
-                          {r.tutorName}
+                          {r.userName}
                         </span>
                       </CardDescription>
                     </div>

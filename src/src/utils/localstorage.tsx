@@ -2,7 +2,7 @@
 
 import { saveJSON, parseJSON, nowISO, uuid } from "@/lib/utils";
 import {
-  Tutor,
+  User,
   UUID,
   Hotel,
   Reservation,
@@ -15,42 +15,42 @@ import {
    Repositórios simples (CRUD via localStorage)
    ========================================== */
 
-const tutorsKey = "petcare:tutors";
+const usersKey = "petcare:users";
 const petsKey = "petcare:pets";
 const hotelsKey = "petcare:hotels";
 const reservationsKey = "petcare:reservations";
 const updatesKey = "petcare:updates";
 
 /* ---------------------
-   Tutor Repository
+   User Repository
    --------------------- */
-export const TutorRepo = {
-  list(): Tutor[] {
-    return parseJSON<Tutor>(tutorsKey);
+export const UserRepo = {
+  list(): User[] {
+    return parseJSON<User>(usersKey);
   },
-  get(id: UUID): Tutor | undefined {
+  get(id: UUID): User | undefined {
     return this.list().find((t) => t.id === id);
   },
-  create(data: Omit<Tutor, "id" | "createdAt">): Tutor {
-    const tutors = this.list();
-    const tutor: Tutor = { ...data, id: uuid(), createdAt: nowISO() };
-    tutors.push(tutor);
-    saveJSON(tutorsKey, tutors);
-    return tutor;
+  create(data: Omit<User, "id" | "createdAt">): User {
+    const users = this.list();
+    const user: User = { ...data, id: uuid(), createdAt: nowISO() };
+    users.push(user);
+    saveJSON(usersKey, users);
+    return user;
   },
-  update(id: UUID, patch: Partial<Tutor>): Tutor | undefined {
-    const tutors = this.list();
-    const index = tutors.findIndex((t) => t.id === id);
+  update(id: UUID, patch: Partial<User>): User | undefined {
+    const users = this.list();
+    const index = users.findIndex((t) => t.id === id);
     if (index === -1) return undefined;
-    tutors[index] = { ...tutors[index], ...patch, updatedAt: nowISO() };
-    saveJSON(tutorsKey, tutors);
-    return tutors[index];
+    users[index] = { ...users[index], ...patch, updatedAt: nowISO() };
+    saveJSON(usersKey, users);
+    return users[index];
   },
   remove(id: UUID): boolean {
-    const tutors = this.list();
-    const next = tutors.filter((t) => t.id !== id);
-    if (next.length === tutors.length) return false;
-    saveJSON(tutorsKey, next);
+    const users = this.list();
+    const next = users.filter((t) => t.id !== id);
+    if (next.length === users.length) return false;
+    saveJSON(usersKey, next);
     return true;
   },
 };
@@ -59,9 +59,9 @@ export const TutorRepo = {
    Pet Repository
    --------------------- */
 export const PetRepo = {
-  list(tutorId?: UUID): Pet[] {
+  list(userId?: UUID): Pet[] {
     const pets = parseJSON<Pet>(petsKey);
-    return tutorId ? pets.filter((p) => p.tutorId === tutorId) : pets;
+    return userId ? pets.filter((p) => p.userId === userId) : pets;
   },
   get(id: UUID): Pet | undefined {
     return this.list().find((p) => p.id === id);
@@ -161,7 +161,7 @@ export const ReservationRepo = {
   changeStatus(
     id: UUID,
     status: ReservationStatus,
-    reason?: string,
+    reason?: string
   ): Reservation | undefined {
     const reservations = this.list();
     const index = reservations.findIndex((r) => r.id === id);
@@ -213,29 +213,34 @@ export const StayUpdateRepo = {
 export function seedDemoData(): void {
   localStorage.clear();
 
-  const tutor = TutorRepo.create({
+  const user = UserRepo.create({
     name: "Ana Martins",
     email: "ana@example.com",
     phone: "31999990000",
+    role: "hotel",
+    password: "123456",
   });
 
   const pet = PetRepo.create({
-    tutorId: tutor.id,
+    userId: user.id,
     name: "Max",
     species: "Cachorro",
     age: 3,
     obs: "Muito dócil",
+    url: "",
   });
 
   const hotel = HotelRepo.create({
     name: "Hotel PetCare BH",
     address: "Av. Central, 100 - Belo Horizonte",
     capacity: 5,
+    description: "",
+    url: "",
   });
 
   ReservationRepo.create({
     petId: pet.id,
-    tutorId: tutor.id,
+    userId: user.id,
     hotelId: hotel.id,
     checkinDate: "2025-11-10",
     checkoutDate: "2025-11-12",

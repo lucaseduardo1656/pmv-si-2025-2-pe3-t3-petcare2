@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 a {
   color: white !important;
   text-decoration: none;
@@ -10,6 +16,18 @@ a {
 
 a:hover {
   color: white !important;
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.page {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #e4e4e4;
 }
 
 @theme inline {
