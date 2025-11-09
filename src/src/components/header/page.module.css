@@ -1,5 +1,29 @@
-.header {
-  background-color: #121212;
+.menu {
+  background-color: #131c2b;
   color: white;
-  padding: 16px;
+  height: 100vh;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 50px;
+}
+
+.button {
+  padding: 15px;
+  border: none;
+  /* background-color: rgba(85, 90, 41, 0.5); */
+  background-color: #131c2b;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: start;
+  flex: 1;
+}
+
+.button:hover {
+  background-color: #2ea043;
 }
