@@ -34,9 +34,11 @@ export default function PetsRegister({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const result = localStorage.getItem("auth") ?? "{id: 1}";
-    setUserId(JSON.parse(result).id);
-  }, []);
+    if (open) {
+      const result = localStorage.getItem("auth") ?? "{id: 1}";
+      setUserId(JSON.parse(result).id);
+    }
+  }, [open]);
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

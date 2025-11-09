@@ -13,7 +13,6 @@ export default function HomePage() {
   useEffect(() => {
     // const result = localStorage.getItem("auth") ?? "{id: 1}";
     const stored = PetRepo.list();
-    console.log(stored);
     setPets(stored);
   }, [att]);
 

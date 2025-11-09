@@ -1,10 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { logout } from "@/lib/auth";
 import styles from "./page.module.css";
 
 export function Header() {
+  const [user, setUser] = useState<object>({});
   const router = useRouter();
+
+  useEffect(() => {
+    const result = localStorage.getItem("auth") ?? "{}";
+    setUser(JSON.parse(result));
+  }, []);
 
   function handleClick(link: string) {
     router.push(link);
@@ -39,15 +46,28 @@ export function Header() {
         <button onClick={() => handleClick("/")} className={styles.button}>
           Home
         </button>
-        <button onClick={() => handleClick("/dashboard")} className={styles.button}>
+        <button
+          onClick={() => handleClick("/dashboard")}
+          className={styles.button}
+        >
           Dashboard
         </button>
-        <button onClick={() => handleClick("/pets")} className={styles.button}>
-          Animais de estimação
-        </button>
-        <button onClick={() => handleClick("/hotel")} className={styles.button}>
-          Hotéis 
-        </button>
+        {user.role === "guardian" && (
+          <button
+            onClick={() => handleClick("/pets")}
+            className={styles.button}
+          >
+            Animais de estimação
+          </button>
+        )}
+        {user.role === "hotel" && (
+          <button
+            onClick={() => handleClick("/hotel")}
+            className={styles.button}
+          >
+            Hotéis
+          </button>
+        )}
       </div>
     </header>
   );

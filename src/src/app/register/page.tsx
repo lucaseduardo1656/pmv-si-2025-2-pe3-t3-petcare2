@@ -7,8 +7,12 @@ import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [selectedRole, setSelectedRole] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const router = useRouter();
 
   const petOptions = [
     { value: "guardian", label: "Tutor" },
@@ -23,16 +27,20 @@ export default function RegisterPage() {
 
   function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
     const data = {
-      name: form.get("name"),
-      email: form.get("email"),
-      phone: form.get("phone"),
+      name: name,
+      email: email,
+      phone: phone,
       role: selectedRole,
-      password: form.get("password"),
+      password: password,
     };
 
     UserRepo.create(data);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    router.push("/");
   }
 
   return (
@@ -57,10 +65,38 @@ export default function RegisterPage() {
             </option>
           ))}
         </select>
-        <input type="text" name="name" placeholder="Nome" required />
-        <input type="email" name="email" placeholder="E-mail" required />
-        <input type="phone" name="phone" placeholder="Telefone" required />
-        <input type="password" name="password" placeholder="Senha" required />
+        <input
+          type="text"
+          name="name"
+          placeholder="Nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="phone"
+          name="phone"
+          placeholder="Telefone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <Link href="/login">Login</Link>
         <button type="submit" className={styles.button}>
           Confirmar
