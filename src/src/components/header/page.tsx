@@ -24,7 +24,7 @@ export function Header() {
 
   return (
     <header className={styles.menu}>
-      <h1>DogCare</h1>
+      <h1>PetCare</h1>
 
       <div className={styles.profile}>
         <img
@@ -34,7 +34,7 @@ export function Header() {
           width={80}
           height={80}
         />
-        <h3>Julio Cesar</h3>
+        <h3>{user.name}</h3>
         <button
           onClick={() => handleLogout()}
           className={styles.buttonleLogout}
@@ -46,12 +46,14 @@ export function Header() {
         <button onClick={() => handleClick("/")} className={styles.button}>
           Home
         </button>
-        <button
-          onClick={() => handleClick("/dashboard")}
-          className={styles.button}
-        >
-          Dashboard
-        </button>
+        {user.role === "hotel" && (
+          <button
+            onClick={() => handleClick("/dashboard")}
+            className={styles.button}
+          >
+            Dashboard
+          </button>
+        )}
         {user.role === "guardian" && (
           <button
             onClick={() => handleClick("/pets")}

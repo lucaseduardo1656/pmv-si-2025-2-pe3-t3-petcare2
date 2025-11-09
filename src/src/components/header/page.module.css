@@ -4,6 +4,7 @@
   background-color: #131c2b;
   color: white;
   width: 25vh;
+  height: 100vh;
   text-align: center;
   padding-top: 15px;
   gap: 40px;
@@ -87,3 +88,4 @@ a.menu {
   object-fit: cover;
   border-radius: 40px;
 }
+

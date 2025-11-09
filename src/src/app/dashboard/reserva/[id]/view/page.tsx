@@ -13,7 +13,7 @@ import {
 import {
   ReservationRepo,
   PetRepo,
-  TutorRepo,
+  UserRepo,
   HotelRepo,
 } from "utils/localstorage";
 import { Reservation, ReservationStatus } from "utils/models";
@@ -60,7 +60,7 @@ export default function ReservaPageViewOnly() {
       setReservation(found);
 
       const pet = PetRepo.get(found.petId);
-      const tutor = TutorRepo.get(found.tutorId);
+      const tutor = UserRepo.get(found.userId);
       const hotel = HotelRepo.get(found.hotelId);
       setPetName(pet?.name ?? "—");
       setTutorName(tutor?.name ?? "—");
@@ -72,10 +72,6 @@ export default function ReservaPageViewOnly() {
       setLoading(false);
     }
   }, [id]);
-
-  function handleBack() {
-    router.push("/dashboard");
-  }
 
   if (loading) {
     return (
@@ -90,7 +86,7 @@ export default function ReservaPageViewOnly() {
       <div className="p-8">
         <div className="mb-4">
           <button
-            onClick={handleBack}
+            onClick={() => router.push("/")}
             className="px-3 py-1 rounded border text-sm hover:bg-slate-50"
           >
             ← Voltar
@@ -121,7 +117,7 @@ export default function ReservaPageViewOnly() {
 
         <div>
           <button
-            onClick={handleBack}
+            onClick={() => router.push("/")}
             className="px-3 py-2 rounded-md border text-sm hover:bg-slate-50"
           >
             Voltar

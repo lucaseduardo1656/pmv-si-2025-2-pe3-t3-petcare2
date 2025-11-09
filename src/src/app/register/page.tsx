@@ -5,9 +5,10 @@ import { isAuthenticated } from "@/lib/auth";
 import { UserRepo } from "@/utils/localstorage";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { User, UserRole } from "@/utils/models";
 
 export default function RegisterPage() {
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("guardian");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -27,7 +28,7 @@ export default function RegisterPage() {
 
   function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = {
+    const data: Omit<User, "id" | "createdAt"> = {
       name: name,
       email: email,
       phone: phone,
@@ -82,7 +83,7 @@ export default function RegisterPage() {
           required
         />
         <input
-          type="phone"
+          type="tel"
           name="phone"
           placeholder="Telefone"
           value={phone}

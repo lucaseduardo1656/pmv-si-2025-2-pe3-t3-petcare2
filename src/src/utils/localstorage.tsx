@@ -161,7 +161,7 @@ export const ReservationRepo = {
   changeStatus(
     id: UUID,
     status: ReservationStatus,
-    reason?: string
+    reason?: string,
   ): Reservation | undefined {
     const reservations = this.list();
     const index = reservations.findIndex((r) => r.id === id);
@@ -213,18 +213,35 @@ export const StayUpdateRepo = {
 export function seedDemoData(): void {
   localStorage.clear();
 
-  const user = UserRepo.create({
+  const userHotel = UserRepo.create({
     name: "Ana Martins",
-    email: "ana@example.com",
+    email: "hotel@e.com",
     phone: "31999990000",
     role: "hotel",
     password: "123456",
   });
 
+  const userTutor = UserRepo.create({
+    name: "Marcio",
+    email: "tutor@e.com",
+    phone: "31999990000",
+    role: "guardian",
+    password: "123456",
+  });
+
   const pet = PetRepo.create({
-    userId: user.id,
+    userId: userTutor.id,
     name: "Max",
     species: "Cachorro",
+    age: 3,
+    obs: "Muito dócil",
+    url: "",
+  });
+
+  PetRepo.create({
+    userId: userTutor.id,
+    name: "Rogério",
+    species: "Gato",
     age: 3,
     obs: "Muito dócil",
     url: "",
@@ -240,7 +257,7 @@ export function seedDemoData(): void {
 
   ReservationRepo.create({
     petId: pet.id,
-    userId: user.id,
+    userId: userTutor.id,
     hotelId: hotel.id,
     checkinDate: "2025-11-10",
     checkoutDate: "2025-11-12",

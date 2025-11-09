@@ -1,19 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useEffectEvent } from "react";
 import { useRouter } from "next/navigation";
 import { login, isAuthenticated } from "@/lib/auth";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { seedDemoData } from "@/utils/localstorage";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
 
+  const Mock = useEffectEvent(() => seedDemoData());
+
   useEffect(() => {
     if (isAuthenticated()) {
       router.push("/");
     }
-  }, []);
+    Mock();
+  });
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

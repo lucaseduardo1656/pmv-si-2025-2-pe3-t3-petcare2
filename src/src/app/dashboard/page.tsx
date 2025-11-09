@@ -16,8 +16,8 @@ import {
   UserRepo,
 } from "utils/localstorage";
 import { Hotel, Reservation, ReservationStatus } from "utils/models";
-import AdicionarReserva from "@/components/modais/AdicionarReservas";
 import { useRouter } from "next/navigation";
+import { AdicionarReservaDialog } from "@/components/modais/AdicionarReserva";
 
 /** Mapeamento de status para rótulos e classes de badge */
 const STATUS_META: Record<ReservationStatus, { label: string; badge: string }> =
@@ -159,7 +159,11 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <AdicionarReserva hotelId={hotel?.id} onCreated={updateData} />
+          <AdicionarReservaDialog
+            hotelId={hotel?.id ?? ""}
+            userId=""
+            onSaved={updateData}
+          />
         </div>
       </div>
 
@@ -178,7 +182,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3">
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) => setFilterStatus(e.target.value as string)}
             className="rounded-md border px-3 py-2 text-sm"
           >
             <option value="ALL">Todos os status</option>
@@ -211,7 +215,11 @@ export default function Dashboard() {
             a primeira.
           </p>
           <div className="flex items-center justify-center">
-            <AdicionarReserva hotelId={hotel?.id} onCreated={updateData} />
+            <AdicionarReservaDialog
+              hotelId={hotel?.id ?? ""}
+              userId=""
+              onSaved={updateData}
+            />
           </div>
         </div>
       ) : (

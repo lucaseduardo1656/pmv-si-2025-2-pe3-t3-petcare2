@@ -11,7 +11,7 @@ export default function DashboardLayout({
         <Header />
       </aside>
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 h-screen">{children}</main>
     </div>
   );
 }

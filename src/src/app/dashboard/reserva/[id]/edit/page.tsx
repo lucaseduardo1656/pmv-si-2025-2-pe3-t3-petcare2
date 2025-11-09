@@ -13,7 +13,7 @@ import {
 import {
   ReservationRepo,
   PetRepo,
-  TutorRepo,
+  UserRepo,
   HotelRepo,
 } from "utils/localstorage";
 import { Reservation, ReservationStatus } from "utils/models";
@@ -60,7 +60,7 @@ export default function ReservaPageClient() {
       setReservation(found);
 
       const pet = PetRepo.get(found.petId);
-      const tutor = TutorRepo.get(found.tutorId);
+      const tutor = UserRepo.get(found.userId);
       const hotel = HotelRepo.get(found.hotelId);
       setPetName(pet?.name ?? "—");
       setTutorName(tutor?.name ?? "—");
@@ -72,10 +72,6 @@ export default function ReservaPageClient() {
       setLoading(false);
     }
   }, [id]);
-
-  function handleBack() {
-    router.push("/dashboard");
-  }
 
   function handleDelete() {
     if (!reservation) return;
@@ -120,7 +116,7 @@ export default function ReservaPageClient() {
       <div className="p-8">
         <div className="mb-4">
           <button
-            onClick={handleBack}
+            onClick={() => router.push("/dashboard")}
             className="px-3 py-1 rounded border text-sm hover:bg-slate-50"
           >
             ← Voltar
@@ -137,7 +133,6 @@ export default function ReservaPageClient() {
   if (!reservation) return;
   // reservation existe
   const meta = STATUS_META[reservation.status];
-  
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
@@ -152,7 +147,7 @@ export default function ReservaPageClient() {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={handleBack}
+            onClick={() => router.push("/dashboard")}
             className="px-3 py-2 rounded-md border text-sm hover:bg-slate-50"
           >
             Voltar
