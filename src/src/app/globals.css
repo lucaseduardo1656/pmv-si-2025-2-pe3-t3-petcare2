@@ -3,12 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
 a {
   color: white !important;
   text-decoration: none;

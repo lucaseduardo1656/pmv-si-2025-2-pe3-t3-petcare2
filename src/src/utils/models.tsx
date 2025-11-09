@@ -11,6 +11,20 @@ export enum ReservationStatus {
   CANCELLED = "CANCELLED",
 }
 
+export enum Roles {
+  Admin = "admin",
+  Tutor = "tutor",
+  Hotel = "hotel",
+}
+
+export interface User {
+  id: UUID;
+  name: string;
+  password: string;
+  phone: number;
+  role: Roles;
+}
+
 export interface Tutor {
   id: UUID;
   name: string;
